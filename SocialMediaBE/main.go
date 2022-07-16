@@ -1,10 +1,10 @@
 package main
 
 import (
-		"fmt"
-		"net/http"
-		"log"
-		"time"
+	"fmt"
+	"log"
+	"net/http"
+	"time"
 )
 
 func main() {
@@ -13,11 +13,11 @@ func main() {
 
 	const addr = "localhost:8080"
 
-	srv := http.Server {
-		Handler: mux,
-		Addr: addr,
+	srv := http.Server{
+		Handler:      mux,
+		Addr:         addr,
 		WriteTimeout: 30 * time.Second,
-		ReadTimeout: 30 * time.Second,
+		ReadTimeout:  30 * time.Second,
 	}
 
 	fmt.Println(addr)
