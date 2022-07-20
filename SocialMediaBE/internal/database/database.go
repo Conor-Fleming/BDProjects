@@ -81,6 +81,27 @@ func (c Client) readDB() (databaseSchema, error) {
 	return result, nil
 }
 
+func (c Client) CreateUser(email, password, name string, age int) (User, error) {
+	//check map if email already exists, if so return error?
+
+	//if the email is unique then add to map and call updateDB()
+	//set created time with 'time.Now().UTC()'
+
+	//
+}
+
+func (c Client) UpdateUser(email, password, name string, age int) (User, error) {
+
+}
+
+func (c Client) GetUser(email string) error {
+
+}
+
+func (c Client) DeleteUser(email string) error {
+
+}
+
 func NewClient(path string) Client {
 	newCli := Client{
 		filepath: path,
