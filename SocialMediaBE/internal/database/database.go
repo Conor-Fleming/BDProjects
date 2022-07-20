@@ -54,6 +54,33 @@ func (c Client) EnsureDB() error {
 	return nil
 }
 
+//unexported function updateDB
+//saves data in given databaseSchema to filepath specified in Client
+//will overwrite what existed previously
+func (c Client) updateDB(db databaseSchema) error {
+	file, err := json.Marshal(db)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(c.filepath, file, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//unexported function readDB
+//returns new databaseSchema populated with latest data from disc
+func (c Client) readDB() (databaseSchema, error) {
+	var result databaseSchema
+	data, err := os.ReadFile(c.filepath)
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
 func NewClient(path string) Client {
 	newCli := Client{
 		filepath: path,
