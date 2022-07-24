@@ -135,6 +135,7 @@ func (c Client) DeleteUser(email string) error {
 		return errors.New("user doesn't exist")
 	}
 	delete(schema.Users, email)
+	c.updateDB(schema)
 	return nil
 }
 
