@@ -2,11 +2,8 @@ package database
 
 import (
 	"encoding/json"
-	"errors"
 	"os"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type User struct {
@@ -84,97 +81,9 @@ func (c Client) readDB() (databaseSchema, error) {
 	return result, nil
 }
 
-func (c Client) CreateUser(email, password, name string, age int) (User, error) {
-	//check map if email already exists, if so return error?
-	schema, _ := c.readDB()
-	if val, ok := schema.Users[email]; !ok {
-		return val, errors.New("user already exists")
-	}
-	//if the email is unique then add to map and call updateDB()
-	//set created time with 'time.Now().UTC()'
-	newUser := User{
-		CreatedAt: time.Now().UTC(),
-		Email:     email,
-		Password:  password,
-		Name:      name,
-		Age:       age,
-	}
-	schema.Users[email] = newUser
-	c.updateDB(schema)
-	return newUser, nil
-}
-
-func (c Client) UpdateUser(email, password, name string, age int) (User, error) {
-	schema, _ := c.readDB()
-	if val, ok := schema.Users[email]; !ok {
-		return val, errors.New("user doesn't exist")
-	}
-	updateUser := User{
-		CreatedAt: schema.Users[email].CreatedAt,
-		Email:     email,
-		Password:  password,
-		Name:      name,
-		Age:       age,
-	}
-	schema.Users[email] = updateUser
-	c.updateDB(schema)
-	return updateUser, nil
-
-}
-
-func (c Client) GetUser(email string) (User, error) {
-	schema, _ := c.readDB()
-	if val, ok := schema.Users[email]; !ok {
-		return val, errors.New("user doesn't exist")
-	}
-	result := schema.Users[email]
-	return result, nil
-}
-
-func (c Client) DeleteUser(email string) error {
-	schema, _ := c.readDB()
-	if _, ok := schema.Users[email]; !ok {
-		return errors.New("user doesn't exist")
-	}
-	delete(schema.Users, email)
-	c.updateDB(schema)
-	return nil
-}
-
 func NewClient(path string) Client {
 	newCli := Client{
 		filepath: path,
 	}
 	return newCli
-}
-
-func (c Client) CreatePost(userEmail, text string) (Post, error) {
-	schema, _ := c.readDB()
-	if _, ok := schema.Users[userEmail]; ok {
-		id := uuid.New().String()
-		newPost := Post{
-			ID:        id,
-			CreatedAt: time.Now().UTC(),
-			UserEmail: userEmail,
-			Text:      text,
-		}
-		schema.Posts[id] = newPost
-		c.updateDB(schema)
-		return newPost, nil
-	}
-	return Post{}, errors.New("There was an error creating the post")
-}
-
-func (c Client) GetPosts(userEmail string) ([]Post, error) {
-
-}
-
-func (c Client) DeletePost(id string) error {
-	schema, _ := c.readDB()
-	if _, ok := schema.Posts[id]; ok {
-		delete(schema.Posts, id)
-		c.updateDB(schema)
-		return nil
-	}
-	return errors.New("Error when deleting, ID doesnt exist")
 }
