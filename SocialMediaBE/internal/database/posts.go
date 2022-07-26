@@ -25,7 +25,17 @@ func (c Client) CreatePost(userEmail, text string) (Post, error) {
 }
 
 func (c Client) GetPosts(userEmail string) ([]Post, error) {
-	return []Post{}, nil
+	var userPosts []Post
+	schema, err := c.readDB()
+	if err != nil {
+		return nil, err
+	}
+	for _, val := range schema.Posts {
+		if val.UserEmail == userEmail {
+			userPosts = append(userPosts, val)
+		}
+	}
+	return userPosts, nil
 }
 
 func (c Client) DeletePost(id string) error {

@@ -43,4 +43,58 @@ func main() {
 		log.Fatal("shouldn't be able to get user that was deleted")
 	}
 	fmt.Println("user confirmed deleted")
+
+	user, err = c.CreateUser("test@example.com", "password", "john doe", 18)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("user recreated", user)
+
+	post, err := c.CreatePost("test@example.com", "my cat is way too fat")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("post created", post)
+
+	secondPost, err := c.CreatePost("test@example.com", "my cat is getting skinny now")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("another post created", secondPost)
+
+	posts, err := c.GetPosts("test@example.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("got posts", posts)
+
+	err = c.DeletePost(post.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("deleted first post", posts)
+
+	posts, err = c.GetPosts("test@example.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("got posts", posts)
+
+	err = c.DeletePost(secondPost.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("deleted second post", posts)
+
+	posts, err = c.GetPosts("test@example.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("got posts", posts)
+
+	err = c.DeleteUser("test@example.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("user redeleted")
 }

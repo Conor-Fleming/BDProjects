@@ -8,7 +8,7 @@ import (
 func (c Client) CreateUser(email, password, name string, age int) (User, error) {
 	//check map if email already exists, if so return error?
 	schema, _ := c.readDB()
-	if val, ok := schema.Users[email]; !ok {
+	if val, ok := schema.Users[email]; ok {
 		return val, errors.New("user already exists")
 	}
 	//if the email is unique then add to map and call updateDB()
