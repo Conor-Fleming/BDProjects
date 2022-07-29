@@ -15,10 +15,18 @@ type errorBody struct {
 	Error string `json: "error"`
 }
 
-func main() {
-	newDB := database.NewClient("./db.json")
+type apiConfig struct {
+	dbClient database.Client
+}
 
+func main() {
 	mux := http.NewServeMux()
+	dbClient := database.NewClient("db.json")
+
+	apiCfig := apiConfig{
+		dbClient: dbClient,
+	}
+
 	mux.HandleFunc("/", testHandler)
 	mux.HandleFunc("/err", testErrorHandler)
 
