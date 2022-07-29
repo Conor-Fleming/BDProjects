@@ -16,6 +16,8 @@ type errorBody struct {
 }
 
 func main() {
+	newDB := database.NewClient("./db.json")
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", testHandler)
 	mux.HandleFunc("/err", testErrorHandler)
