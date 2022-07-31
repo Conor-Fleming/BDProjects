@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/Conor-Fleming/SocialMediaBE/internal/database"
@@ -33,7 +34,7 @@ func main() {
 
 	mux.HandleFunc("/users", apiCfig.endpointUsersHandler)
 	mux.HandleFunc("/users/", apiCfig.endpointUsersHandler)
-	//mux.HandleFunc("/", testHandler)
+	mux.HandleFunc("/users/EMAIL", apiCfig.endpointUsersHandler)
 	//mux.HandleFunc("/err", testErrorHandler)
 
 	const addr = "localhost:8080"
@@ -54,13 +55,16 @@ func (apiCfig apiConfig) endpointUsersHandler(w http.ResponseWriter, r *http.Req
 	switch r.Method {
 	case http.MethodGet:
 		// call GET handler
+		apiCfig.handlerGetUser(w, r)
 	case http.MethodPost:
 		// call POST handler
 		apiCfig.handlerCreateUser(w, r)
 	case http.MethodPut:
-		// call PUT handler
+		// call Update handler
+		apiCfig.handlerUpdateUser(w, r)
 	case http.MethodDelete:
-		// call DELETE handler
+		//call Delete handler
+		apiCfig.handlerDeleteUser(w, r)
 	default:
 		respondWithError(w, 404, errors.New("method not supported"))
 	}
@@ -86,6 +90,53 @@ func (apiCfig apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	respondWithJSON(w, http.StatusCreated, result)
+}
+
+func (apiCfig apiConfig) handlerDeleteUser(w http.ResponseWriter, r *http.Request) {
+	resEmail := strings.TrimPrefix(r.URL.Path, "/users/")
+	fmt.Println(resEmail, r.URL.Path)
+	err := apiCfig.dbClient.DeleteUser(resEmail)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+	respondWithJSON(w, http.StatusOK, struct{}{})
+}
+
+func (apiCfig apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request) {
+	resEmail := strings.TrimPrefix(r.URL.Path, "/users/")
+	result, err := apiCfig.dbClient.GetUser(resEmail)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+	respondWithJSON(w, http.StatusOK, result)
+}
+
+func (apiCfig apiConfig) handlerUpdateUser(w http.ResponseWriter, r *http.Request) {
+	type parameters struct {
+		Password string `json:"password"`
+		Name     string `json:"name"`
+		Age      int    `json:"age"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	params := parameters{}
+	err := decoder.Decode(&params)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+	resEmail := strings.TrimPrefix(r.URL.Path, "/users/")
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+	result, err := apiCfig.dbClient.UpdateUser(resEmail, params.Password, params.Name, params.Age)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+	respondWithJSON(w, http.StatusOK, result)
 }
 
 /*
