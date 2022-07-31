@@ -12,7 +12,7 @@ import (
 )
 
 type errorBody struct {
-	Error string `json: "error"`
+	Error string `json:"error"`
 }
 
 type apiConfig struct {
@@ -100,18 +100,21 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	response, err := json.Marshal(payload)
-	if err != nil {
-		log.Println("error marshalling", err)
-		w.WriteHeader(500)
-		response, _ := json.Marshal(errorBody{
-			Error: "error marshalling",
-		})
+	if payload != nil {
+		response, err := json.Marshal(payload)
+		if err != nil {
+			log.Println("error marshalling", err)
+			w.WriteHeader(500)
+			response, _ := json.Marshal(errorBody{
+				Error: "error marshalling",
+			})
+			w.Write(response)
+			return
+		}
+		w.WriteHeader(code)
 		w.Write(response)
-		return
+		//w.WriteHeader(code)
 	}
-	w.Write(response)
-	w.WriteHeader(code)
 }
 
 /*
