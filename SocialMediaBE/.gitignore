@@ -1,4 +1,4 @@
 *.json
 sandbox/
-*.http
+httpTest/
 *.exe

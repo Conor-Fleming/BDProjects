@@ -1,0 +1,6 @@
+POST http://localhost:8080/posts
+
+{
+   "UserEmail":"conor@example.com",
+   "Text":"one more post with json key updated?"
+ }
