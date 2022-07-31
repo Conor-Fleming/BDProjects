@@ -32,7 +32,8 @@ func main() {
 
 	mux.HandleFunc("/users", apiCfig.endpointUsersHandler)
 	mux.HandleFunc("/users/", apiCfig.endpointUsersHandler)
-	//mux.HandleFunc("users/EMAIL", apiCfig.endpointUsersHandler)
+	mux.HandleFunc("/posts", apiCfig.endpointPostsHandler)
+	mux.HandleFunc("/posts/", apiCfig.endpointPostsHandler)
 
 	const addr = "localhost:8080"
 
