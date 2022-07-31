@@ -1,8 +1,0 @@
-POST http://localhost:8080/users
-
-{
-   "Email":"conor@example.com",
-   "Password":"testpass",
-   "Name":"Conor",
-   "Age": 555
- }
