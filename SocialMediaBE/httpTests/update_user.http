@@ -1,7 +1,0 @@
-PUT http://localhost:8080/users/ciaraK2@example.com
-
-{
-   "Password":"dont worry",
-   "Name":"ciara kyne",
-   "Age":123
- }
