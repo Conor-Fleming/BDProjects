@@ -23,7 +23,7 @@ Create a virtual environment:
 python<version> -m venv <virtual-environment-name>
 ```
 Like so:
-```python3 -m venv venv```
+```python3 -m venv env```
 
 Activate the virtual environment:
 ```
