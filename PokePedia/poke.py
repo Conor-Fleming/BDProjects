@@ -18,6 +18,7 @@ def validate(name):
         return False
     return True
 
+#stats func handles the printing/formatting of poke data
 def stats(data):
     print(f"\n{data['name'].upper()}")
     print("-----------------------------")
