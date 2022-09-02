@@ -25,8 +25,7 @@ def main():
 def welcome():
     print("Welcome to PokePedia, to view a Pokemon's stats please input its name.")
     print("If you need some ideas to get started, use the command 'list', to view a list of Pokemon.")
-    print("Use 'quit' to exit PokePedia.\n")
-
+    print("Use 'quit' to exit PokePedia. If you need to clear the screen use 'clear'\n")
 
 if __name__ =='__main__':
     main()
