@@ -2,8 +2,6 @@ import requests
 import random
 
 def list():
-    count = 0
-   
     randlist = random.sample(range(1, 100), 5)
     for val in randlist:
         url = f"https://pokeapi.co/api/v2/pokemon/{val}"
@@ -13,4 +11,5 @@ def list():
 
         data = response.json()
         print(data['name'])
+    print()
     
